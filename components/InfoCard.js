@@ -15,7 +15,7 @@ const InfoCard = ({ img, location, title, descr, star, price, total }) => {
           objectFit="cover"
         />
       </div>
-      <div className="flex flex-col flex-grow pl-5 pt-3">
+      <div className="flex flex-col flex-grow pl-5 py-3">
         <div className="flex justify-between items-center">
           <p className="">{location}</p>
           <HeartIcon className="cursor-pointer h-7" />
