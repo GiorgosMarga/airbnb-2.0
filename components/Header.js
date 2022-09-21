@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/solid";
-
 import {
   GlobeAltIcon,
   UserCircleIcon,
@@ -11,8 +10,9 @@ import {
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker } from "react-date-range";
+import { useRouter } from "next/router";
 
-const Header = () => {
+const Header = ({ placeholder }) => {
   const [searchInput, setSearchInput] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -23,14 +23,30 @@ const Header = () => {
     key: "selection",
   };
 
+  const router = useRouter();
   const handleSelect = (ranges) => {
     setStartDate(ranges.selection.startDate);
     setEndDate(ranges.selection.endDate);
   };
+
+  const search = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        location: searchInput,
+        guests,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      },
+    });
+  };
   return (
     <header className="sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md p-5 md:px-10">
       {/* left */}
-      <div className="relative flex items-center h-10 cursor-pointer my-auto">
+      <div
+        onClick={() => router.push("/")}
+        className="relative flex items-center h-10 cursor-pointer my-auto"
+      >
         <Image
           src="https://links.papareact.com/qd3"
           alt=""
@@ -46,7 +62,7 @@ const Header = () => {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           type="text"
-          placeholder="Start your search"
+          placeholder={placeholder || "Start your search"}
           className="outline-none pl-5 bg-transparent flex-grow text-gray-600 text-sm placeholder-gray-400"
         />
         <MagnifyingGlassCircleIcon className="w-8 h-8 rounded-full text-red-400 cursor-pointer hidden md:inline-flex md:mx-2" />
@@ -86,7 +102,9 @@ const Header = () => {
             <button className="flex-grow" onClick={() => setSearchInput("")}>
               Cancel
             </button>
-            <button className="flex-grow text-red-400">Search</button>
+            <button className="flex-grow text-red-400" onClick={search}>
+              Search
+            </button>
           </div>
         </div>
       )}
